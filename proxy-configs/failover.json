@@ -1,0 +1,9 @@
+{
+  "Name": "greetings-api",
+  "Service": {
+    "Service": "greetings-api",
+    "Failover": {
+      "Datacenters": ["dc-us", "dc-japan"]
+    }
+  }
+}

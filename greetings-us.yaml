@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: greetings-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "greetings-api-deployment"
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9102"
+    consul.hashicorp.com/connect-inject: "true"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "greetings-api"
+  template:
+    metadata:
+      labels:
+        app: "greetings-api"
+    spec:
+      containers:
+        - name: "greetings-api"
+          image: gcr.io/se-kabu/greetings-api:latest
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: GKE_LOCATION
+              value: "GKE USA"
+      serviceAccountName: "greetings-api"

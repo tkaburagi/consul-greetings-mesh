@@ -1,0 +1,42 @@
+global:
+  name: consul
+  datacenter: dc-us
+  tls:
+    enabled: true
+    verify: false
+  federation:
+    enabled: true
+    createFederationSecret: true
+server:
+  replicas: 1
+  bootstrapExpect: 1
+  disruptionBudget:
+    enabled: true
+    maxUnavailable: 0
+  extraConfig: |
+    {
+      "ui_config": {
+        "enabled": true
+      }
+    }
+client:
+  enabled: true
+  grpc: true
+ui:
+  enabled: true
+  service:
+    type: LoadBalancer
+connectInject:
+  enabled: true
+  default: true
+  centralConfig:
+    enabled: true
+    defaultProtocol: "http"
+meshGateway:
+  enabled: true
+ingressGateways:
+  enabled: true
+  gateways:
+    - name: ingress-gateway
+      service:
+        type: LoadBalancer

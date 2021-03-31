@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hello-api
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-api
+  labels:
+    app: "hello-api"
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9102"
+    consul.hashicorp.com/connect-inject: "true"
+    consul.hashicorp.com/connect-service-upstreams: "greetings-api:5000"
+    # consul.hashicorp.com/connect-service-upstreams: "greetings-api:5000:dc-us"
+    # consul.hashicorp.com/connect-service-upstreams: "greetings-api:5001:dc-japan"
+spec:
+  serviceAccountName: hello-api
+  containers:
+    - name: hello-api
+      image: gcr.io/se-kabu/hello-api:latest
+      ports:
+        - containerPort: 8080
+          name: http
