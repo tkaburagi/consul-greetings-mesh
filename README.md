@@ -1,13 +1,17 @@
 ![](pic.png)
 
+* replace values
+1. `proxy-configs/proxy-defaults.hcl`: Jaeger's host IP
+2. `greetings-api` -> `applications.properties`: Jaeger's host IP
+3. `hello-api` -> `applications.properties`: Jaeger's host IP
 
 * US
 ```
-gcloud container clusters create lab-cluster-1 \
- --num-nodes=3 \
+gcloud container clusters create lab-cluster \
+ --num-nodes=5 \
  --zone us-central1-c
 
-gcloud container clusters get-credentials lab-cluster-1 \
+gcloud container clusters get-credentials lab-cluster \
  --zone us-central1-c \
  --project se-kabu
 
@@ -30,8 +34,10 @@ gcloud container clusters create lab-cluster-2 \
 gcloud container clusters get-credentials lab-cluster-2 \
  --zone asia-northeast1-a \
  --project se-kabu
-
+ 
+kc delete secret/consul-federation
 kc apply -f consul-federation-secret.yaml
+
 helm install -f helm/japan.yaml consul hashicorp/consul --wait
 
 kc apply -f greetings-jp.yaml
@@ -69,7 +75,7 @@ kubectl get secret --namespace onecluster-servicemesh grafana -o jsonpath="{.dat
 * Prometheus & Grafana
 ```
 helm install -f helm/prometheus-values.yaml prometheus prometheus-community/prometheus --wait
-
+helm install -f helm/grafana-values.yaml grafana grafana/grafana --wait
 ```
 
 * Jaeger
@@ -85,4 +91,17 @@ docker run -d --name jaeger \
   -p 14250:14250 \
   -p 9411:9411 \
   jaegertracing/all-in-one:1.22
+```
+
+* resize GKE
+```
+gcloud container clusters resize lab-cluster \
+    --node-pool default-pool \
+    --num-nodes 3 \
+    --zone us-central1-c
+
+gcloud container clusters resize lab-cluster-2 \
+    --node-pool default-pool \
+    --num-nodes 3 \
+    --zone asia-northeast1-a
 ```
