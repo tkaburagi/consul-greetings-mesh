@@ -53,6 +53,17 @@ helm install -f helm/japan.yaml consul hashicorp/consul --wait
 kc apply -f greetings-jp.yaml
 ```
 
+* Consul Setup
+```
+gcloud container clusters get-credentials lab-cluster \
+ --zone us-central1-c \
+ --project se-kabu
+
+export CONSUL_HTTP_SSL=true
+export CONSUL_HTTP_SSL_VERIFY=false
+export CONSUL_HTTP_ADDR=34.136.246.217 # retrieve from kubectl get svc | grep consul-ui
+```
+
 * Proxy Setup
 ```
 consul config write proxy-configs/proxy-defaults.hcl
