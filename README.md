@@ -11,6 +11,11 @@ gcloud container clusters create lab-cluster \
  --num-nodes=5 \
  --zone us-central1-c
 
+gcloud container clusters resize lab-cluster \
+ --node-pool default-pool \
+ --num-nodes 5 \
+ --zone us-central1-c
+ 
 gcloud container clusters get-credentials lab-cluster \
  --zone us-central1-c \
  --project se-kabu
@@ -29,6 +34,11 @@ kc apply -f hello.yaml
 ```
 gcloud container clusters create lab-cluster-2 \
  --num-nodes=3 \
+ --zone asia-northeast1-a
+ 
+gcloud container clusters resize lab-cluster-2 \
+ --node-pool default-pool \
+ --num-nodes 3 \
  --zone asia-northeast1-a
 
 gcloud container clusters get-credentials lab-cluster-2 \
